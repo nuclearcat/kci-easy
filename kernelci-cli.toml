@@ -1,0 +1,14 @@
+[DEFAULT]
+api = "docker-host"
+indent = 4
+
+[kci]
+api = "docker-host"
+storage = "personal"
+config = ["config/core"]
+
+[kci.secrets]
+api."staging.kernelci.org".token = "x"
+
+[storage.staging-azure]
+storage_cred = "x"
