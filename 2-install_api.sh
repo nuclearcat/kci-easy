@@ -2,7 +2,7 @@
 . ./main.cfg
 cp .env-api kernelci/kernelci-api/.env
 cp api-configs.yaml kernelci/kernelci-core/config/core/
-cp kernelci-cli.toml kernelci/kernelci-core/
+cp kernelci-cli.toml kernelci/kernelci-core/kernelci.toml
 
 cd kernelci/kernelci-api
 docker-compose up -d
@@ -26,3 +26,12 @@ done
 # INFO, if you have issues with stale/old data, check for 
 # docker volume kernelci-api_mongodata and delete it
 ./scripts/setup_admin_user --email ${YOUR_EMAIL}
+
+cd ../kernelci-core
+./kci user token admin > ../../admin-token.txt
+ADMIN_TOKEN=$(cat ../../admin-token.txt)
+
+echo "[kci.secrets]
+api.\"docker-host\".token = \"$ADMIN_TOKEN\" 
+" >> kernelci.toml
+
