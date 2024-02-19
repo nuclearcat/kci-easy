@@ -18,7 +18,7 @@ mv tmp.yaml kernelci/kernelci-pipeline/config/pipeline.yaml
 }
 
 # replace in pipeline.yaml http://172.17.0.1:8001 to http://localhost:8001
-sed -i 's/http:\/\/172.17.0.1:8001/http:\/\/localhost:8001/g' kernelci/kernelci-pipeline/config/pipeline.yaml
+sed -i 's/http:\/\/172.17.0.1:8001/http:\/\/host.docker.internal:8001/g' kernelci/kernelci-pipeline/config/pipeline.yaml
 
 # TODO: Check if this is already done
 #append_storage
