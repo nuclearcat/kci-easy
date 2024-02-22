@@ -5,6 +5,18 @@ cp api-configs.yaml kernelci/kernelci-core/config/core/
 cp kernelci-cli.toml kernelci/kernelci-core/kernelci.toml
 
 cd kernelci/kernelci-api
+chown -R 0777 docker/storage/data
+# enable ssh and storage nginx
+sed -i 's/^#  /  /' docker-compose.yaml
+if [ -f ../../ssh.key ]; then
+    echo "ssh.key already exists"
+else
+    # generate non-interactively ssh key to ssh.key
+    ssh-keygen -t rsa -b 4096 -N "" -f ../../ssh.key
+    # get public key and add to docker/ssh/user-data/authorized_keys
+    cat ../../ssh.key.pub >> docker/ssh/user-data/authorized_keys
+fi
+
 docker-compose up -d
 echo "Waiting for API to be up"
 sleep 1
@@ -28,6 +40,7 @@ done
 ./scripts/setup_admin_user --email ${YOUR_EMAIL}
 
 cd ../kernelci-core
+echo "Issuing token for admin user"
 ./kci user token admin > ../../admin-token.txt
 ADMIN_TOKEN=$(cat ../../admin-token.txt)
 

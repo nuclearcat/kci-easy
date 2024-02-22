@@ -39,8 +39,11 @@ sed -i 's|data/ssh|'$PIPELINE_PWD'/data/ssh|g' config/pipeline.yaml
 # replace data/output by $PIPELINE_PWD/data/output
 sed -i 's|data/output|'$PIPELINE_PWD'/data/output|g' config/pipeline.yaml
 # set 777 to data/output and data/ssh (TODO: or set proper uid, kernelci is 1000?)
-chmod 777 data/output
+chmod -R 777 data
 chmod 777 data/ssh
+cp ../../ssh.key data/ssh/id_rsa_tarball
+chown 1000:1000 data/ssh/id_rsa_tarball
+chmod 600 data/ssh/id_rsa_tarball
 cd ../..
 
 #create .env
