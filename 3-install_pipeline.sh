@@ -34,10 +34,23 @@ sed -i 's/env_file: .env/env_file: .env\/.env/g' kernelci/kernelci-pipeline/conf
 #+      - '/root/kernelci-pipeline/data/output/:/home/kernelci/data/output'
 cd kernelci/kernelci-pipeline
 PIPELINE_PWD=$(pwd)
-# replace data/ssh by $PIPELINE_PWD/data/ssh
-sed -i 's|data/ssh|'$PIPELINE_PWD'/data/ssh|g' config/pipeline.yaml
+# replace lab_type: kubernetes to lab_type: docker
+# This is BAD hack, but it works for now
+sed -i 's/lab_type: kubernetes/lab_type: docker/g' config/pipeline.yaml
+
 # replace data/output by $PIPELINE_PWD/data/output
-sed -i 's|data/output|'$PIPELINE_PWD'/data/output|g' config/pipeline.yaml
+# might be two variants (default and staging)
+#      - '/data/kernelci-deploy-checkout/kernelci-pipeline/data/ssh/:/home/kernelci/data/ssh'
+#      - '/data/kernelci-deploy-checkout/kernelci-pipeline/data/output/:/home/kernelci/data/output'
+# AND
+#      - 'data/ssh/:/home/kernelci/data/ssh'
+#      - 'data/output/:/home/kernelci/data/output'
+sed -i "s|- 'data/output/|- '\$PIPELINE_PWD'/data/output/|g" config/pipeline.yaml
+sed -i "s|- 'data/ssh/|- '\$PIPELINE_PWD'/data/ssh/|g" config/pipeline.yaml
+# OR
+sed -i "s|- '/data/kernelci-deploy-checkout/kernelci-pipeline/data/ssh/|- '$PIPELINE_PWD/data/ssh/|g" config/pipeline.yaml
+sed -i "s|- '/data/kernelci-deploy-checkout/kernelci-pipeline/data/output/|- '$PIPELINE_PWD/data/output/|g" config/pipeline.yaml
+
 # set 777 to data/output and data/ssh (TODO: or set proper uid, kernelci is 1000?)
 chmod -R 777 data
 chmod 777 data/ssh
