@@ -67,6 +67,7 @@ API_TOKEN=$(cat admin-token.txt)
 echo "KCI_STORAGE_CREDENTIALS=${STORAGE_TOKEN}" > .env
 echo "KCI_API_TOKEN=${API_TOKEN}" >> .env
 echo "API_TOKEN=${API_TOKEN}" >> .env
+cp .env kernelci/kernelci-pipeline/.docker-env
 mv .env kernelci/kernelci-pipeline/.env
 
 

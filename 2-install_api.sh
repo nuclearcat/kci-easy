@@ -5,7 +5,9 @@ cp api-configs.yaml kernelci/kernelci-core/config/core/
 cp kernelci-cli.toml kernelci/kernelci-core/kernelci.toml
 
 cd kernelci/kernelci-api
+mkdir -p docker/redis/data
 chown -R 0777 docker/storage/data
+chown -R 0777 docker/redis/data
 # enable ssh and storage nginx
 sed -i 's/^#  /  /' docker-compose.yaml
 if [ -f ../../ssh.key ]; then
