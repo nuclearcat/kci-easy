@@ -19,6 +19,8 @@ else
     cat ../../ssh.key.pub >> docker/ssh/user-data/authorized_keys
 fi
 
+# down, just in case old containers are running
+docker-compose down
 docker-compose up -d
 echo "Waiting for API to be up"
 sleep 1
