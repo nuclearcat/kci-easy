@@ -64,7 +64,7 @@ cd ../..
 #KCI_API_TOKEN=
 #API_TOKEN=
 API_TOKEN=$(cat admin-token.txt)
-echo "KCI_STORAGE_CREDENTIALS=${STORAGE_TOKEN}" > .env
+echo "KCI_STORAGE_CREDENTIALS=/home/kernelci/data/ssh/id_rsa_tarball" > .env
 echo "KCI_API_TOKEN=${API_TOKEN}" >> .env
 echo "API_TOKEN=${API_TOKEN}" >> .env
 cp .env kernelci/kernelci-pipeline/.docker-env
