@@ -21,6 +21,14 @@ else
     cd ..
 fi
 
+# if KCI_CACHE set, git clone linux kernel tree and keep as archive
+if [ -n "$KCI_CACHE" ]; then
+    if [ ! -f linux.tar ]; then
+        git clone --mirror $KCI_LINUX_REPO linux
+        tar -cf linux.tar linux
+        rm -rf linux
+fi
+
 # checkout branches
 cd kernelci-core
 echo Update core repo
@@ -37,6 +45,15 @@ echo Update pipeline repo
 git fetch origin
 git checkout $KCI_PIPELINE_BRANCH
 cd ..
+
+# if KCI_CACHE set, unpack linux kernel tree to 
+# kernelci/kernelci-pipeline/data/src
+if [ -n "$KCI_CACHE" ]; then
+    if [ ! -d kernelci/kernelci-pipeline/data/src/linux ]; then
+        tar -xf linux.tar -C kernelci/kernelci-pipeline/data/src
+        chmod -R 1000:1000 kernelci/kernelci-pipeline/data/src/linux
+    fi
+fi
 
 # build docker images
 # purge docker build cache with confirmation
@@ -67,6 +84,8 @@ echo Build docker images: clang-17+kselftest+kernelci for x86
 ./kci docker $args clang-17 kselftest kernelci --arch x86
 echo Build docker images: gcc-10+kselftest+kernelci for x86
 ./kci docker $args gcc-10 kselftest kernelci --arch x86
+echo Build docker images: gcc-10+kselftest+kernelci for arm64
+./kci docker $args gcc-10 kselftest kernelci --arch arm64
 
 
 
