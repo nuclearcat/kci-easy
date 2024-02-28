@@ -1,5 +1,6 @@
 #!/bin/sh
 . ./main.cfg
+
 cp .env-api kernelci/kernelci-api/.env
 cp api-configs.yaml kernelci/kernelci-core/config/core/
 cp kernelci-cli.toml kernelci/kernelci-core/kernelci.toml

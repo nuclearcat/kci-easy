@@ -1,5 +1,5 @@
 #!/bin/sh
-. main.cfg
+. ./main.cfg
 
 # if directry kernelci doesn't exist, then we dont have repos cloned
 if [ ! -d kernelci ]; then
