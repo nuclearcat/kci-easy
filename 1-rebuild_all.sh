@@ -1,13 +1,5 @@
 #!/bin/sh
-KCI_CORE_REPO=https://github.com/kernelci/kernelci-core
-#KCI_CORE_BRANCH=staging.kernelci.org
-KCI_CORE_BRANCH=main
-KCI_API_REPO=https://github.com/kernelci/kernelci-api
-KCI_API_BRANCH=staging.kernelci.org
-#KCI_API_BRANCH=main
-KCI_PIPELINE_REPO=https://github.com/kernelci/kernelci-pipeline
-KCI_PIPELINE_BRANCH=staging.kernelci.org
-#KCI_PIPELINE_BRANCH=main
+. main.cfg
 
 # if directry kernelci doesn't exist, then we dont have repos cloned
 if [ ! -d kernelci ]; then
@@ -58,7 +50,7 @@ api_url=$(git remote get-url origin)
 cd ..
 cd kernelci-core
 echo Retrieve Core revision and branch
-core_rev=$(git show --pretty=format:%H -s origin/staging.kernelci.org)
+core_rev=$(git show --pretty=format:%H -s origin/$KCI_CORE_BRANCH)
 core_url=$(git remote get-url origin)
 build_args="--build-arg core_rev=$core_rev --build-arg api_rev=$api_rev --build-arg core_url=$core_url --build-arg api_url=$api_url"
 px_arg='--prefix=kernelci/staging-'
