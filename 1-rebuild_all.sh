@@ -24,9 +24,10 @@ fi
 # if KCI_CACHE set, git clone linux kernel tree and keep as archive
 if [ -n "$KCI_CACHE" ]; then
     if [ ! -f linux.tar ]; then
-        git clone --mirror $KCI_LINUX_REPO linux
+        git clone --mirror https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git linux
         tar -cf linux.tar linux
         rm -rf linux
+    fi
 fi
 
 # checkout branches
@@ -49,9 +50,9 @@ cd ..
 # if KCI_CACHE set, unpack linux kernel tree to 
 # kernelci/kernelci-pipeline/data/src
 if [ -n "$KCI_CACHE" ]; then
-    if [ ! -d kernelci/kernelci-pipeline/data/src/linux ]; then
-        tar -xf linux.tar -C kernelci/kernelci-pipeline/data/src
-        chmod -R 1000:1000 kernelci/kernelci-pipeline/data/src/linux
+    if [ ! -d kernelci-pipeline/data/src/linux ]; then
+        tar -xf linux.tar -C kernelci-pipeline/data/src
+        chown -R 1000:1000 kernelci-pipeline/data/src/linux
     fi
 fi
 
