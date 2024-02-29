@@ -59,6 +59,13 @@ chown 1000:1000 data/ssh/id_rsa_tarball
 chmod 600 data/ssh/id_rsa_tarball
 cd ../..
 
+#replace kernelci/staging- by local/staging-
+#TODO: Make PR to pipeline with ENV var for image prefix
+sed -i 's/kernelci\/staging-/local\/staging-/g' kernelci/kernelci-pipeline/docker-compose.yaml
+
+# same for yaml files in config
+sed -i 's/kernelci\/staging-/local\/staging-/g' kernelci/kernelci-pipeline/config/pipeline.yaml
+
 #create .env
 #KCI_STORAGE_CREDENTIALS=L0CALT0KEN
 #KCI_API_TOKEN=
