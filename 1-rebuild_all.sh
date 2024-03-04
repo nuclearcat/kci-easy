@@ -3,22 +3,33 @@
 
 # if directry kernelci doesn't exist, then we dont have repos cloned
 if [ ! -d kernelci ]; then
+    echo Create kernelci directory, clone repos and checkout branches
     mkdir kernelci
     cd kernelci
+    echo Clone core, api and pipeline repos
+
+    echo Clone core repo
     git clone $KCI_CORE_REPO
+    cd kernelci-core
+    git fetch origin
+    git checkout $KCI_CORE_BRANCH
+    cd ..
+
+    echo Clone api repo
     git clone $KCI_API_REPO
+    cd kernelci-api
+    git fetch origin
+    git checkout $KCI_API_BRANCH
+    cd ..
+
+    echo Clone pipeline repo
     git clone $KCI_PIPELINE_REPO
+    cd kernelci-pipeline
+    git fetch origin
+    git checkout $KCI_PIPELINE_BRANCH
+    cd ..
 else
     cd kernelci
-    cd kernelci-core
-    git pull
-    cd ..
-    cd kernelci-api
-    git pull
-    cd ..
-    cd kernelci-pipeline
-    git pull
-    cd ..
 fi
 
 # if KCI_CACHE set, git clone linux kernel tree and keep as archive
@@ -29,23 +40,6 @@ if [ -n "$KCI_CACHE" ]; then
         rm -rf linux
     fi
 fi
-
-# checkout branches
-cd kernelci-core
-echo Update core repo
-git fetch origin
-git checkout $KCI_CORE_BRANCH
-cd ..
-cd kernelci-api
-echo Update api repo
-git fetch origin
-git checkout $KCI_API_BRANCH
-cd ..
-cd kernelci-pipeline
-echo Update pipeline repo
-git fetch origin
-git checkout $KCI_PIPELINE_BRANCH
-cd ..
 
 # if KCI_CACHE set, unpack linux kernel tree to 
 # kernelci/kernelci-pipeline/data/src
