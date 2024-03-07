@@ -45,8 +45,8 @@ sed -i 's/lab_type: kubernetes/lab_type: docker/g' config/pipeline.yaml
 # AND
 #      - 'data/ssh/:/home/kernelci/data/ssh'
 #      - 'data/output/:/home/kernelci/data/output'
-sed -i "s|- 'data/output/|- '\$PIPELINE_PWD'/data/output/|g" config/pipeline.yaml
-sed -i "s|- 'data/ssh/|- '\$PIPELINE_PWD'/data/ssh/|g" config/pipeline.yaml
+sed -i "s|- 'data/output/|- '$PIPELINE_PWD/data/output/|g" config/pipeline.yaml
+sed -i "s|- 'data/ssh/|- '$PIPELINE_PWD/data/ssh/|g" config/pipeline.yaml
 # OR
 sed -i "s|- '/data/kernelci-deploy-checkout/kernelci-pipeline/data/ssh/|- '$PIPELINE_PWD/data/ssh/|g" config/pipeline.yaml
 sed -i "s|- '/data/kernelci-deploy-checkout/kernelci-pipeline/data/output/|- '$PIPELINE_PWD/data/output/|g" config/pipeline.yaml

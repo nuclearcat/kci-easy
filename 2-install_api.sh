@@ -16,9 +16,9 @@ if [ -f ../../ssh.key ]; then
 else
     # generate non-interactively ssh key to ssh.key
     ssh-keygen -t rsa -b 4096 -N "" -f ../../ssh.key
-    # get public key and add to docker/ssh/user-data/authorized_keys
-    cat ../../ssh.key.pub >> docker/ssh/user-data/authorized_keys
 fi
+# get public key and add to docker/ssh/user-data/authorized_keys
+cat ../../ssh.key.pub > docker/ssh/user-data/authorized_keys
 
 # down, just in case old containers are running
 docker-compose down
