@@ -66,6 +66,25 @@ sed -i 's/kernelci\/staging-/local\/staging-/g' kernelci/kernelci-pipeline/docke
 # same for yaml files in config
 sed -i 's/kernelci\/staging-/local\/staging-/g' kernelci/kernelci-pipeline/config/pipeline.yaml
 
+# check if kernelci/kernelci-pipeline/config/kernelci.toml
+# has [trigger] and then force = 1
+# this will force builds on each restart
+grep -q "force = 1" kernelci/kernelci-pipeline/config/kernelci.toml
+if [ $? -ne 0 ]; then
+    sed -i '/\[trigger\]/a force = 1' kernelci/kernelci-pipeline/config/kernelci.toml
+fi
+
+# remove from pipeline yaml all build_configs:
+sed -i '/build_configs:/,$d' kernelci/kernelci-pipeline/config/pipeline.yaml
+# add 
+cat <<EOF >> kernelci/kernelci-pipeline/config/pipeline.yaml
+build_configs:
+  kernelci_staging-stable:
+    tree: kernelci
+    branch: 'staging-stable'
+    variants: *build-variants
+EOF
+
 #create .env
 #KCI_STORAGE_CREDENTIALS=L0CALT0KEN
 #KCI_API_TOKEN=

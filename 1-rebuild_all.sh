@@ -1,5 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 . ./main.cfg
+
+function failonerror {
+    if [ $? -ne 0 ]; then
+        echo "Failed"
+        exit 1
+    fi
+}
 
 # if directry kernelci doesn't exist, then we dont have repos cloned
 if [ ! -d kernelci ]; then
@@ -12,21 +19,21 @@ if [ ! -d kernelci ]; then
     git clone $KCI_CORE_REPO
     cd kernelci-core
     git fetch origin
-    git checkout $KCI_CORE_BRANCH
+    git checkout origin/$KCI_CORE_BRANCH
     cd ..
 
     echo Clone api repo
     git clone $KCI_API_REPO
     cd kernelci-api
     git fetch origin
-    git checkout $KCI_API_BRANCH
+    git checkout origin/$KCI_API_BRANCH
     cd ..
 
     echo Clone pipeline repo
     git clone $KCI_PIPELINE_REPO
     cd kernelci-pipeline
     git fetch origin
-    git checkout $KCI_PIPELINE_BRANCH
+    git checkout origin/$KCI_PIPELINE_BRANCH
     cd ..
 else
     cd kernelci
@@ -53,7 +60,7 @@ fi
 # build docker images
 # purge docker build cache with confirmation
 echo "Purge docker build cache"
-docker builder prune
+docker builder prune -f
 
 cd kernelci-api
 echo Retrieve API revision and branch
@@ -69,18 +76,24 @@ px_arg='--prefix=local/staging-'
 args="build --verbose $px_arg $build_args"
 echo Build docker images: kernelci args=$args
 ./kci docker $args kernelci 
+failonerror
 echo Build docker images: k8s+kernelci
 ./kci docker $args k8s kernelci
+failonerror
 echo Build docker images: api
 ./kci docker $args api --version="$api_rev"
+failonerror
 echo Tag docker image of api to latest
 docker tag local/staging-api:$api_rev local/staging-api:latest
+failonerror
 echo Build docker images: clang-17+kselftest+kernelci for x86
 ./kci docker $args clang-17 kselftest kernelci --arch x86
+failonerror
 echo Build docker images: gcc-10+kselftest+kernelci for x86
 ./kci docker $args gcc-10 kselftest kernelci --arch x86
+failonerror
 echo Build docker images: gcc-10+kselftest+kernelci for arm64
 ./kci docker $args gcc-10 kselftest kernelci --arch arm64
-
+failonerror
 
 
