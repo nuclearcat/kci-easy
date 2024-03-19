@@ -1,6 +1,13 @@
 #!/bin/bash
 . ./main.cfg
 
+# i am groot?
+if [ $(id -u) -ne 0 ]; then
+    SUDO=sudo
+else
+    SUDO=
+fi
+
 function failonerror {
     if [ $? -ne 0 ]; then
         echo "Failed"
@@ -53,7 +60,7 @@ fi
 if [ -n "$KCI_CACHE" ]; then
     if [ ! -d kernelci-pipeline/data/src/linux ]; then
         tar -xf ../linux.tar -C kernelci-pipeline/data/src
-        chown -R 1000:1000 kernelci-pipeline/data/src/linux
+        $SUDO chown -R 1000:1000 kernelci-pipeline/data/src/linux
     fi
 fi
 

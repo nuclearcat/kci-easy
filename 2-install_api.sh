@@ -1,14 +1,21 @@
 #!/bin/sh
 . ./main.cfg
 
+# i am groot?
+if [ $(id -u) -ne 0 ]; then
+    SUDO=sudo
+else
+    SUDO=
+fi
+
 cp .env-api kernelci/kernelci-api/.env
 cp api-configs.yaml kernelci/kernelci-core/config/core/
 cp kernelci-cli.toml kernelci/kernelci-core/kernelci.toml
 
 cd kernelci/kernelci-api
 mkdir -p docker/redis/data
-chmod -R 0777 docker/storage/data
-chmod -R 0777 docker/redis/data
+${SUDO} chmod -R 0777 docker/storage/data
+${SUDO} chmod -R 0777 docker/redis/data
 # enable ssh and storage nginx
 sed -i 's/^#  /  /' docker-compose.yaml
 if [ -f ../../ssh.key ]; then
