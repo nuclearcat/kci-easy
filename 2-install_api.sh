@@ -49,11 +49,11 @@ done
 
 # INFO, if you have issues with stale/old data, check for 
 # docker volume kernelci-api_mongodata and delete it
-./scripts/setup_admin_user --email ${YOUR_EMAIL}
+../../helpers/scripts_setup_admin_user.exp "${YOUR_EMAIL}" "${ADMIN_PASSWORD}"
 
 cd ../kernelci-core
 echo "Issuing token for admin user"
-./kci user token admin > ../../admin-token.txt
+../../helpers/kci_user_token_admin.exp "${ADMIN_PASSWORD}" > ../../admin-token.txt
 ADMIN_TOKEN=$(cat ../../admin-token.txt)
 
 echo "[kci.secrets]
